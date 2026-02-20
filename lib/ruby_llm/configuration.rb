@@ -16,6 +16,7 @@ module RubyLLM
                   :gemini_api_base,
                   :vertexai_project_id,
                   :vertexai_location,
+                  :vertexai_credentials_json,
                   :deepseek_api_key,
                   :perplexity_api_key,
                   :bedrock_api_key,
@@ -76,7 +77,7 @@ module RubyLLM
     end
 
     def instance_variables
-      super.reject { |ivar| ivar.to_s.match?(/_id|_key|_secret|_token$/) }
+      super.reject { |ivar| ivar.to_s.match?(/_id|_key|_secret|_token|_credentials/) }
     end
   end
 end

@@ -55,6 +55,7 @@ RubyLLM.configure do |config|
   config.gemini_api_key = ENV['GEMINI_API_KEY']
   config.vertexai_project_id = ENV['GOOGLE_CLOUD_PROJECT'] # Available in v1.7.0+
   config.vertexai_location = ENV['GOOGLE_CLOUD_LOCATION']
+  config.vertexai_credentials_json = Rails.application.credentials.google_service_account # Optional
   config.deepseek_api_key = ENV['DEEPSEEK_API_KEY']
   config.mistral_api_key = ENV['MISTRAL_API_KEY']
   config.perplexity_api_key = ENV['PERPLEXITY_API_KEY']
@@ -95,6 +96,27 @@ end
 ```
 
 These headers are optional and only needed for organization-specific billing or project tracking.
+
+### Vertex AI Authentication
+
+Vertex AI supports two authentication methods:
+
+**Application Default Credentials (default):** If `vertexai_credentials_json` is not set, RubyLLM uses [Application Default Credentials](https://cloud.google.com/docs/authentication/provide-credentials-adc). This works automatically on Google Cloud, when you've run `gcloud auth application-default login` locally, or when `GOOGLE_APPLICATION_CREDENTIALS` points to a service account key file.
+
+**Service Account JSON:** Pass credentials directly as a JSON string — no temp file needed. Useful when storing secrets in Rails credentials, Vault, or environment variables:
+
+```ruby
+RubyLLM.configure do |config|
+  config.vertexai_project_id = 'my-project'
+  config.vertexai_location = 'us-central1'
+
+  # From Rails credentials
+  config.vertexai_credentials_json = Rails.application.credentials.google_service_account
+
+  # Or from an environment variable
+  config.vertexai_credentials_json = ENV['GOOGLE_CREDENTIALS_JSON']
+end
+```
 
 ## Custom Endpoints
 
@@ -389,6 +411,7 @@ RubyLLM.configure do |config|
   config.gemini_api_key = String
   config.vertexai_project_id = String  # GCP project ID
   config.vertexai_location = String     # e.g., 'us-central1'
+  config.vertexai_credentials_json = String  # Optional service account JSON, falls back to ADC
   config.deepseek_api_key = String
   config.mistral_api_key = String
   config.perplexity_api_key = String
