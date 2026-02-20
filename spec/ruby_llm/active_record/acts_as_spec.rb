@@ -797,6 +797,22 @@ RSpec.describe RubyLLM::ActiveRecord::ActsAs do
       expect(chat.model_id).to eq('us.anthropic.claude-haiku-4-5-20251001-v1:0')
       expect(chat.provider).to eq('bedrock')
     end
+
+    it 'passes assume_model_exists through to_llm' do
+      chat = Chat.create!(
+        model: 'custom-model-xyz',
+        provider: 'openrouter',
+        assume_model_exists: true
+      )
+
+      expect(RubyLLM::Chat).to receive(:new).with(
+        model: 'custom-model-xyz',
+        provider: :openrouter,
+        assume_model_exists: true
+      ).and_call_original
+
+      expect { chat.to_llm }.not_to raise_error
+    end
   end
 
   describe 'extended thinking persistence' do
