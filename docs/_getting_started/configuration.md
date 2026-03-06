@@ -275,7 +275,7 @@ end
 
 ```ruby
 RubyLLM.configure do |config|
-  # Log to file
+  # Log to file (or set RUBYLLM_LOG_FILE=/var/log/ruby_llm.log)
   config.log_file = '/var/log/ruby_llm.log'
   config.log_level = :info  # :debug, :info, :warn
 
@@ -311,6 +311,10 @@ end
 - Shows chunk-by-chunk streaming internals (accumulator state, parsing, tool chunks)
 - Useful for diagnosing streaming/provider parsing issues
 - Can also be enabled with `RUBYLLM_STREAM_DEBUG=true`
+
+`log_file` notes:
+- Defaults to `$stdout`
+- Can also be set with `RUBYLLM_LOG_FILE=/path/to/file.log`
 
 `log_regexp_timeout` notes:
 - Available in `v1.13.0+`
